@@ -1,0 +1,49 @@
+,metric,categorical,equal,k,score
+0,manhattan,True,True,4,0.8578
+1,manhattan,True,True,8,0.8604
+2,manhattan,True,True,12,0.8616
+3,manhattan,True,False,4,0.838
+4,manhattan,True,False,8,0.859
+5,manhattan,True,False,12,0.8612
+6,manhattan,False,True,4,0.858
+7,manhattan,False,True,8,0.8596
+8,manhattan,False,True,12,0.8612
+9,manhattan,False,False,4,0.8348
+10,manhattan,False,False,8,0.8558
+11,manhattan,False,False,12,0.8604
+12,euclidean,True,True,4,0.8574
+13,euclidean,True,True,8,0.86
+14,euclidean,True,True,12,0.8612
+15,euclidean,True,False,4,0.8356
+16,euclidean,True,False,8,0.8554
+17,euclidean,True,False,12,0.86
+18,euclidean,False,True,4,0.8556
+19,euclidean,False,True,8,0.8596
+20,euclidean,False,True,12,0.861
+21,euclidean,False,False,4,0.8348
+22,euclidean,False,False,8,0.8558
+23,euclidean,False,False,12,0.8608
+24,minkowski (p=4),True,True,4,0.8566
+25,minkowski (p=4),True,True,8,0.8598
+26,minkowski (p=4),True,True,12,0.8614
+27,minkowski (p=4),True,False,4,0.834
+28,minkowski (p=4),True,False,8,0.8558
+29,minkowski (p=4),True,False,12,0.861
+30,minkowski (p=4),False,True,4,0.8558
+31,minkowski (p=4),False,True,8,0.8602
+32,minkowski (p=4),False,True,12,0.8614
+33,minkowski (p=4),False,False,4,0.8302
+34,minkowski (p=4),False,False,8,0.8566
+35,minkowski (p=4),False,False,12,0.8606
+36,chebyshev,True,True,4,0.8556
+37,chebyshev,True,True,8,0.8598
+38,chebyshev,True,True,12,0.861
+39,chebyshev,True,False,4,0.831
+40,chebyshev,True,False,8,0.8562
+41,chebyshev,True,False,12,0.8598
+42,chebyshev,False,True,4,0.8562
+43,chebyshev,False,True,8,0.8612
+44,chebyshev,False,True,12,0.8612
+45,chebyshev,False,False,4,0.834
+46,chebyshev,False,False,8,0.8578
+47,chebyshev,False,False,12,0.8606
