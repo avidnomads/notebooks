@@ -166,6 +166,20 @@ def arithmeticRoutingTest():
     testCases = numSums + numDiffs
     
     return TestResults.fromCaseLists('Arithmetic routing', trueCases, testCases)
+    
+def decimalDecomposeTest():
+    """Test Number.decimalDecompose"""
+    
+    NTESTS = 1000
+    testInts = np.random.randint(low=0, high=100000, size=NTESTS)
+    testNums = [Number(str(x), isNegative=False) for x in testInts]
+    trueCases, testCases = [], []
+    for x, xn in zip(testInts, testNums):
+        B = np.random.randint(low=0, high=2*len(xn))
+        trueCases.append([x % 10**B, x//10**B])
+        testCases.append([t.asInt() for t in xn.decimalDecompose(B)])
+    
+    return TestResults.fromCaseLists('Decimal decomposition', trueCases, testCases)
 
 
 baseTest().report()
@@ -173,3 +187,4 @@ staticTest().report()
 additionTest().report()
 subtractionTest().report()
 arithmeticRoutingTest().report()
+decimalDecomposeTest().report()

@@ -134,7 +134,7 @@ class Number():
         if not preReversed:
             s = s[::-1]
         s = s.rstrip('-')
-        if s == '0'*len(s):
+        if s == '0'*len(s) or s == '':
             s = '0'
         else:
             s = s.rstrip('0')
@@ -294,3 +294,40 @@ class Number():
             nct = Number.ninesComplement(t)
             nct = Number.addOne(nct)
             return Number(nct, isNegative=True, preReversed=True)
+            
+    def decimalDecompose(self, power):
+        """
+        Given power of ten, return Numbers x0, x1 
+        where x1*(10**power) + x0 = self
+        """
+        
+        return (
+            Number( #x0
+                self.string[:power],
+                isNegative = self.isNegative,
+                preReversed = True
+            ),
+            Number( #x1
+                self.string[power:],
+                isNegative = self.isNegative,
+                preReversed = True
+            )
+        )
+        
+    def multiplyTenPower(self, power):
+        """Multiply self by 10**power. Power must be nonnegative"""
+        
+        self.string = '0'*power + self.string
+        
+    def multiplySingleDigits(self, other):
+        """Multiply two positive single-digit Numbers"""
+        
+        if len(self) > 1 or len(other) > 1:
+            raise ValueError(
+                'Must be single digits; received {}, {}'.format(str(self), str(other))
+            )
+        
+        return Number(
+            Number.multTable[self.string][other.string],
+            isNegative = (self.isNegative != other.isNegative)
+        )
