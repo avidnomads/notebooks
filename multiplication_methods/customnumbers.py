@@ -35,6 +35,11 @@ class Rational:
         if self.isNegative:
             return '<Rational: -' + self.stringRep + '>'
         return '<Rational: ' + self.stringRep + '>'
+        
+    def __str__(self):
+        if self.isNegative:
+            return '-' + self.stringRep
+        return self.stringRep
     
     @classmethod
     def fromDigits(cls, digits, highestPower, negative=False):
