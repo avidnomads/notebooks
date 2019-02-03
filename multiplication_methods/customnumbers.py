@@ -1,5 +1,6 @@
 from collections import defaultdict
 from operator import itemgetter
+import math
 
 
 class Rational:
@@ -336,3 +337,51 @@ class Number():
             Number.multTable[self.string][other.string],
             isNegative = (self.isNegative != other.isNegative)
         )
+        
+        
+class Complex:
+    """Complex numbers represented as a real and imaginary part"""
+    
+    def __init__(self, re, im):
+        self.re = re
+        self.im = im
+        
+    def __repr__(self):
+        return '{0} + i{1}'.format(self.re, self.im)
+        
+    def __eq__(self, other):
+        tol = 10**-12
+        return (abs(self.re - other.re) < tol and abs(self.im - other.im) < tol)
+        
+    def magnitude(self):
+        return math.sqrt(self.re*self.re + self.im*self.im)
+    
+    def __add__(self, other):
+        return Complex(self.re + other.re, self.im + other.im)
+        
+    def __sub__(self, other):
+        return Complex(self.re - other.re, self.im - other.im)
+        
+    def __mul__(self, other):
+        return Complex(
+            self.re*other.re - self.im*other.im,
+            self.re*other.im + self.im*other.re
+        )
+        
+    def __rmul__(self, r):
+        return Complex(r*self.re, r*self.im)
+        
+    def __truediv__(self, other):
+        g = other.re*other.re + other.im*other.im
+        if g == 0:
+            raise DivisionByZero(other)
+            
+        return Complex(
+            (self.re*other.re + self.im*other.im)/g,
+            (self.im*other.re - self.re*other.im)/g
+        )
+        
+    def swap(self):
+        """Swap real and imaginary parts"""
+        
+        return Complex(self.im, self.re)

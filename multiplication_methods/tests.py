@@ -5,7 +5,7 @@ Test the major components of Number class in numbers.py
 
 import numpy as np
 import pprint
-from customnumbers import Number
+from customnumbers import Number, Complex
 
 
 SEP = '-'*8
@@ -180,11 +180,43 @@ def decimalDecomposeTest():
         testCases.append([t.asInt() for t in xn.decimalDecompose(B)])
     
     return TestResults.fromCaseLists('Decimal decomposition', trueCases, testCases)
+    
+def complexArithmeticTest():
+    """Test complex add/sub/mul/div"""
+    
+    NTESTS = 1000
+    testRes = [-1000 + np.random.random()*2000 for _ in range(NTESTS)]
+    testIms = [-1000 + np.random.random()*2000 for _ in range(NTESTS)]
+    testComps = [Complex(re, im) for re, im in zip(testRes, testIms)]
+    trueCases, testCases = [], []
+    
+    # Addition/subtraction
+    for z, w in zip(testComps, reversed(testComps)):
+        trueCases.append(z + w - w)
+        testCases.append(z)
+    
+    # Multiplication/division
+    for z, w in zip(testComps, reversed(testComps)):
+        if w.magnitude() > 0:
+            trueCases.append((z*w)/w)
+            testCases.append(z)
+        else:
+            trueCases.append(0)
+            testCases.append(0)
+    
+    return TestResults.fromCaseLists('Complex arithmetic', trueCases, testCases)
 
 
-baseTest().report()
-staticTest().report()    
-additionTest().report()
-subtractionTest().report()
-arithmeticRoutingTest().report()
-decimalDecomposeTest().report()
+def runNumberTests():
+    baseTest().report()
+    staticTest().report()    
+    additionTest().report()
+    subtractionTest().report()
+    arithmeticRoutingTest().report()
+    decimalDecomposeTest().report()
+    
+def runComplexTests():
+    complexArithmeticTest().report()
+
+#runNumberTests()    
+runComplexTests()
