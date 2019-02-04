@@ -29,11 +29,49 @@ def IDFTdirect(X):
         x.append((1/N)*x_n)
     return x
     
-def testDFT(DFTfn, IDFTfn, TOL=10**-6):
+def DFTct(x):
+    """Compute DFT by Cooley-Tukey algorithm
+    
+    Note: assumes len(x) is a power of 2
+    """
+    
+    N = len(x)
+    if N == 2:
+        return [x[0] + x[1], x[0] - x[1]]
+        
+    Half_N = int(N/2)
+    X = [0]*N
+    
+    Evens = DFTct([x[2*n]   for n in range(Half_N)])
+    Odds =  DFTct([x[2*n+1] for n in range(Half_N)])
+    
+    for k in range(Half_N):
+        a = 2*math.pi*k/N
+        w = Complex(math.cos(a), -math.sin(a))
+        E_k = Evens[k]
+        O_k = w*Odds[k]
+        X[k] = E_k + O_k
+        X[k + Half_N] = E_k - O_k
+    return X
+    
+def swap(C):
+    """Vectorize Complex.swap (apply swap to every Complex in list)"""
+    
+    return [c.swap() for c in C]
+    
+def IDFTshortcut(X):
+    """Compute inverse DFT using swap function and Cooley-Tukey DFT
+    
+    Note: assumes len(X) is a power of 2
+    """
+    
+    N_inv = 1/len(X)
+    return [N_inv*c for c in swap(DFTct(swap(X)))]
+    
+def testDFT(DFTfn, IDFTfn, TOL=10**-6, LEN=2**7):
     """Test that IDFT(DFT(x)) = x, within tolerance"""
     
     N_TESTS = 100
-    LEN = 100
     
     seqs = [randomSeq(LEN, -1000, 1000) for _ in range(N_TESTS)]
     passed = 0
@@ -107,8 +145,6 @@ def DFTmultiply(x, y, DFTfn, IDFTfn, stringsReversed=False):
     Return: decimal string of x*y in usual order (i.e. in descending order)
     """
     
-    #NOTE: theoretically this should actually happen in the Cooley-Tukey DFT fn, 
-    #but more efficient to do here
     # 1. Convert decimal strings to lists of digits, pad with zeros so that length
     #    is a power of 2
     N_1 = len(x)
@@ -124,8 +160,8 @@ def DFTmultiply(x, y, DFTfn, IDFTfn, stringsReversed=False):
         y_seq = [int(d) for d in y[::-1]] + [0]*(N - N_2)
     
     # 2. Compute DFT of sequences and multiply them elementwise
-    X = DFTfn(x_seq)
-    Y = DFTfn(y_seq)
+    X = DFTfn([Complex(d, 0) for d in x_seq])
+    Y = DFTfn([Complex(d, 0) for d in y_seq])
     C = [a*b for a,b in zip(X,Y)]
     
     # 3. Compute inverse DFT to get coefficients of product polynomial
@@ -160,8 +196,14 @@ def randomSeq(n, a, b):
         for _ in range(n)
     ]
     
+
     
 if __name__ == '__main__':
-    failed = testDFTmultiply(DFTdirect, IDFTdirect)
+    
+    # Test DFT functions
+    failed = testDFT(DFTct, IDFTdirect)
+    
+    # Test DFT multiplicatiion 
+    failed = testDFTmultiply(DFTct, IDFTshortcut)
     if failed:
-        print(failed)
+        print(failed[:5])
