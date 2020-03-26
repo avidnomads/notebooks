@@ -1,11 +1,15 @@
+### group_graphs
+
+Develop and apply an algorithm to build the Cayley graph of a group presentation
+
 ### monte_carlo_areas
 
-Compute and plot some interesting areas in plan geometry by random sampling
+Plot and compute areas pf interesting planar regions by random sampling
 
 ### multiplication_methods
 
-Explore algorithms for fast multiplication
+Explore fast multiplication algorithms
 
 ### predicting_loan_default
 
-Naive hyperparameter selection with LendingClub data
+Very naive hyperparameter selection with LendingClub data
