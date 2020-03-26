@@ -4,7 +4,7 @@ Develop and apply an algorithm to build the Cayley graph of a group presentation
 
 ### monte_carlo_areas
 
-Plot and compute areas pf interesting planar regions by random sampling
+Plot and estimate areas of interesting planar regions by random sampling
 
 ### multiplication_methods
 
