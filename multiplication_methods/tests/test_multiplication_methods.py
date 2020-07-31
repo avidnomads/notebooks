@@ -15,3 +15,19 @@ from ..customnumbers import *
 ])
 def test_rational_mult_table(a, b, product):
     assert str(int(a)*int(b)) == product
+
+@pytest.mark.parametrize("inputString,stringRep", [
+    ("12345", "12345"),
+    ("-12345", "-12345"),
+    ("123.45", "123.45"),
+    ("-123.45", "-123.45"),
+    ("123.450000000000000", "123.45"),
+    ("000000000000123.45", "123.45"),
+    ("000000000000123.450000000000000", "123.45"),
+    ("123000000000000.450000000000000", "123000000000000.45"),
+    ("-000000000000123.450000000000000", "-123.45"),
+    ("-123000000000000.450000000000000", "-123000000000000.45"),
+])
+def test_init_stringRep(inputString, stringRep):
+    r = Rational(inputString)
+    assert(r.stringRep == stringRep)

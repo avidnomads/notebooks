@@ -18,18 +18,26 @@ class Rational:
     }
     
     def __init__(self, string):
-        if string[0] == '-':
-            self.isNegative = True
-            string = string[1:]
-        else:
-            self.isNegative = False
-        string = string.strip('0')
-        self.stringRep = string
-        dotIndex = string.find('.')
-        if dotIndex < 0:
-            self.highestPower = len(string)-1
-        else:
-            self.highestPower = dotIndex-1
+        """ Does some basic cleaning,
+            but generally assumes the string is well-formed.
+
+            Examples of well-formed strings: 
+                -123.45
+                0
+                .00000000000000005
+
+            Examples of ill-formed strings:
+                86e-123
+                123.45.9
+                5%
+                5. 6 7778
+        """
+
+        self.stringRep = string.strip().strip('0')
+        self.isNegative = (self.stringRep[0] == '-')
+        self.stringRep = string.strip('0')
+        dotIndex = self.stringRep.find('.')
+        self.highestPower = dotIndex-1 if dotIndex >= 0 else len(string)-1
         self.digits = [d for d in string if d != '.']
         
     def __repr__(self):
