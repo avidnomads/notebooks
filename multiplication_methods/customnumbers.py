@@ -1,5 +1,4 @@
 from collections import defaultdict
-from operator import itemgetter
 import math
 
 
@@ -114,13 +113,12 @@ class Rational:
                     highestPower += 1
             currentPower += 1
         
-        # 3. Construct and return the Rational from the components
-        components = list(productsByPower.items())
-        components.sort(reverse=True, key=itemgetter(0))
-        digits = [c[1] for c in components]
-        hp = components[0][0]
-        isNegative = (self.isNegative and not other.isNegative) or (not self.isNegative and other.isNegative)
-        return Rational.fromDigits(digits, highestPower=hp, negative=isNegative)
+        # 3. Construct and return the product from its digits
+        return Rational.fromDigits(
+            digits = [productsByPower[p] for p in range(highestPower, lowestPower-1, -1)],
+            highestPower = highestPower, 
+            negative = (self.isNegative and not other.isNegative) or (not self.isNegative and other.isNegative)
+        )
         
 
 class Number():
@@ -129,29 +127,28 @@ class Number():
     decimal string and a sign bit
     """
     
-    """Table of additions of numbers 0-10"""
+    """Tables storing results of basic arithmetic ops for arguments <= 10
+
+        addTable[a][b] = a+b
+        multTable[a][b] = a*b
+        incTable[a] = a+1
+        decTable[a] = a-1
+        ninesTable[a] = 9-a
+    """
     addTable = {
         str(d_one): {
             str(d_two): str(d_one + d_two) for d_two in range(11)
         } 
         for d_one in range(11)
     }
-    
-    """Table of products of single digit numbers"""
     multTable = {
         str(d_one): {
             str(d_two): str(d_one*d_two) for d_two in range(10)
         } 
         for d_one in range(10)
     }
-    
-    """Table of plus-ones for each digit < 9"""
     incTable = {str(d): str(d+1) for d in range(9)}
-    
-    """Table of minus-ones for each digit > 0"""
     decTable = {str(d): str(d-1) for d in range(1, 10)}
-    
-    """Table of nine's complements for each digit"""
     ninesTable = {str(d): str(9-d) for d in range(10)}
     
     def __init__(self, string, isNegative=False, preReversed=False):
@@ -167,7 +164,7 @@ class Number():
         self.string = s
         self.isNegative = isNegative
         
-    def __repr__(self):
+    def __str__(self):
         if self.isNegative:
             return '-' + self.string[::-1]
         return self.string[::-1]

@@ -1,12 +1,5 @@
-"""
-Tests for multiplication_methods notebook
-"""
-
 import pytest
-# import sys
-# sys.path.insert(0, '../multiplication_methods')
 from ..customnumbers import *
-
 
 
 @pytest.mark.parametrize('a,b,product', [
@@ -109,6 +102,7 @@ def test_Rational_digitPowers(inputString,expected):
     ('100', '.01', 1),
     ('.01', '100', 1),
     ('100', '-.01', -1),
+    ('548293940872904862.456', '958382303898.39270023', 525475210267303666441036478793.74258956488),
 ])
 def test_Rational_multiplication(inputStringA,inputStringB,expected):
     assert (Rational(inputStringA)*Rational(inputStringB)).asFloat() == expected
