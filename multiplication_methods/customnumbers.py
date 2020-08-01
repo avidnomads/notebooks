@@ -25,17 +25,24 @@ class Rational:
                 -123.45
                 0
                 .00000000000000005
+                -01.1010
 
             Examples of ill-formed strings:
                 86e-123
                 123.45.9
                 5%
                 5. 6 7778
+                00-100
         """
 
-        self.stringRep = string.strip().strip('0')
+        self.stringRep = string.strip()
         self.isNegative = (self.stringRep[0] == '-')
-        self.stringRep = string.strip('0')
+        if self.stringRep[0] == '-':
+            self.isNegative = True
+            self.stringRep = '-' + self.stringRep[1:].strip('0')
+        else:
+            self.isNegative = False
+            self.stringRep = self.stringRep.strip('0')
         dotIndex = self.stringRep.find('.')
         self.highestPower = dotIndex-1 if dotIndex >= 0 else len(string)-1
         self.digits = [d for d in string if d != '.']
