@@ -39,17 +39,21 @@ class Rational:
         self.isNegative = (string[0] == '-')
         if string[0] == '-':
             self.isNegative = True
-            string = string[1:].strip('0')
+            string = string[1:].lstrip('0')
         else:
             self.isNegative = False
-            string = string.strip('0')
+            string = string.lstrip('0')
         if '-' in string or string.count('.') > 1:
             raise ValueError(f'Ill-formed string: { string }')
+        if '.' in string:
+            string = string.rstrip('0').rstrip('.')
         self.dotIndex = string.find('.')
         self.highestPower = self.dotIndex-1 if self.dotIndex >= 0 else len(string)-1
         self.digits = [d for d in string if d != '.']
         
     def __str__(self):
+        if not self.digits:
+            return '0'
         baseString = ''.join([str(d) for d in self.digits])
         if self.dotIndex > -1:
             baseString = baseString[:self.dotIndex] + '.' + baseString[self.dotIndex:]
@@ -82,10 +86,13 @@ class Rational:
         return [(d, self.highestPower-i) for i, d in enumerate(self.digits)]
     
     def asFloat(self):
-        return (-1 if self.isNegative else 1)*float(str(self))
+        return float(str(self))
     
     def __mul__(self, other):
         """Multiply two Rationals by the grid method"""
+
+        if not self.digits or not other.digits:
+            return Rational('0')
         
         # 1. Compute products of individual digits, tracking powers of ten
         products = [

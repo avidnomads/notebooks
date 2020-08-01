@@ -8,6 +8,7 @@ import pytest
 from ..customnumbers import *
 
 
+
 @pytest.mark.parametrize('a,b,product', [
     ('0','0','0'), ('0','9','0'),
     ('1','0','0'), ('1','9','9'),
@@ -36,6 +37,12 @@ def test_Rational_mult_table(a, b, product):
     ('0.010','.01'),
     ('-0.010','-.01'),
     ('0.01010','.0101'),
+    ('10', '10'),
+    ('100', '100'),
+    ('1.0', '1'),
+    ('1.00', '1'),
+    ('10.', '10'),
+    ('100.', '100'),
 ])
 def test_Rational_str(inputString, expected):
     r = Rational(inputString)
@@ -64,3 +71,44 @@ def test_Rational_fromDigits(digits,highestPower,negative,expected):
 def test_Rational_fromDigits_ValueError(digits,highestPower,negative):
     with pytest.raises(ValueError):
         r = Rational.fromDigits(digits, highestPower, negative)
+
+@pytest.mark.parametrize('inputString,expected', [
+    ('0',       []),
+    ('.1',      [ ('1', -1) ]),
+    ('.12',     [ ('1', -1), ('2', -2) ]),
+    ('.123',    [ ('1', -1), ('2', -2), ('3', -3) ]),
+    ('1',       [ ('1', 0) ]),
+    ('12',      [ ('1', 1), ('2', 0) ]),
+    ('123',     [ ('1', 2), ('2', 1), ('3', 0) ]),
+    ('-.1',     [ ('1', -1) ]),
+    ('-.12',    [ ('1', -1), ('2', -2) ]),
+    ('-.123',   [ ('1', -1), ('2', -2), ('3', -3) ]),
+    ('-1',      [ ('1', 0) ]),
+    ('-12',     [ ('1', 1), ('2', 0) ]),
+    ('-123',    [ ('1', 2), ('2', 1), ('3', 0) ]),
+])
+def test_Rational_digitPowers(inputString,expected):
+    r = Rational(inputString)
+    assert r.digitPowers == expected
+
+@pytest.mark.parametrize('inputStringA,inputStringB,expected', [
+    ('0', '0', 0),
+    ('0', '1', 0),
+    ('1', '0', 0),
+    ('0', '-1', 0),
+    ('1', '-0', 0),
+    ('0', '.1', 0),
+    ('.1', '0', 0),
+    ('.0', '.1', 0),
+    ('1', '.0', 0),
+    ('1', '1', 1),
+    ('1', '1.', 1),
+    ('1', '.1', .1),
+    ('-1', '1', -1),
+    ('1', '-1', -1),
+    ('100', '.01', 1),
+    ('.01', '100', 1),
+    ('100', '-.01', -1),
+])
+def test_Rational_multiplication(inputStringA,inputStringB,expected):
+    assert (Rational(inputStringA)*Rational(inputStringB)).asFloat() == expected
