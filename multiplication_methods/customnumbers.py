@@ -35,32 +35,35 @@ class Rational:
                 00-100
         """
 
-        self.stringRep = string.strip()
-        self.isNegative = (self.stringRep[0] == '-')
-        if self.stringRep[0] == '-':
+        string = string.strip()
+        self.isNegative = (string[0] == '-')
+        if string[0] == '-':
             self.isNegative = True
-            self.stringRep = '-' + self.stringRep[1:].strip('0')
+            string = string[1:].strip('0')
         else:
             self.isNegative = False
-            self.stringRep = self.stringRep.strip('0')
-        dotIndex = self.stringRep.find('.')
-        self.highestPower = dotIndex-1 if dotIndex >= 0 else len(string)-1
+            string = string.strip('0')
+        if '-' in string or string.count('.') > 1:
+            raise ValueError(f'Ill-formed string: { string }')
+        self.dotIndex = string.find('.')
+        self.highestPower = self.dotIndex-1 if self.dotIndex >= 0 else len(string)-1
         self.digits = [d for d in string if d != '.']
         
-    def __repr__(self):
-        if self.isNegative:
-            return '<Rational: -' + self.stringRep + '>'
-        return '<Rational: ' + self.stringRep + '>'
-        
     def __str__(self):
-        if self.isNegative:
-            return '-' + self.stringRep
-        return self.stringRep
+        baseString = ''.join([str(d) for d in self.digits])
+        if self.dotIndex > -1:
+            baseString = baseString[:self.dotIndex] + '.' + baseString[self.dotIndex:]
+        return f"{ '-' if self.isNegative else '' }{ baseString }"
+        
+    def __repr__(self):
+        return f"<Rational: { str(self) }>"
     
     @classmethod
     def fromDigits(cls, digits, highestPower, negative=False):
         """Use list of digits and highest power to construct Rational"""
         
+        if highestPower >= len(digits):
+            raise ValueError('highestPower >= number of digits')
         s = ''.join([str(digit) for digit in digits])
         if highestPower < 0:
             s = '.' + '0'*(-1-highestPower) + s
@@ -79,9 +82,7 @@ class Rational:
         return [(d, self.highestPower-i) for i, d in enumerate(self.digits)]
     
     def asFloat(self):
-        if self.isNegative:
-            return -1*float(self.stringRep)
-        return float(self.stringRep)
+        return (-1 if self.isNegative else 1)*float(str(self))
     
     def __mul__(self, other):
         """Multiply two Rationals by the grid method"""
