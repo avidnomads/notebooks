@@ -95,14 +95,10 @@ class Rational:
             return Rational('0')
         
         # 1. Compute products of individual digits, tracking powers of ten
-        products = [
-            (Rational.multTable[selfDigit][otherDigit], selfPower + otherPower)
-            for selfDigit, selfPower in self.digitPowers
-            for otherDigit, otherPower in other.digitPowers
-        ]
         productsByPower = defaultdict(int)
-        for product, power in products:
-            productsByPower[power] += product
+        for selfDigit, selfPower in self.digitPowers:
+            for otherDigit, otherPower in other.digitPowers:
+                productsByPower[selfPower + otherPower] += Rational.multTable[selfDigit][otherDigit]
         
         # 2. Loop over components, adding runover to the next digit until
         #    all components are in the range 0-9
