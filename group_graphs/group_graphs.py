@@ -1,3 +1,5 @@
+import copy
+
 class Power:
     """ A power x^n of a generator x """
     
