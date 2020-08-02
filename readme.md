@@ -1,6 +1,6 @@
 ### group_graphs
 
-Develop and apply an algorithm to build the Cayley graph of a group presentation
+Build the Cayley graph of a group presentation
 
 ### monte_carlo_areas
 
