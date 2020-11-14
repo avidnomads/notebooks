@@ -22,7 +22,11 @@ Plot and estimate areas of interesting planar regions by random sampling
 
 Explore fast multiplication algorithms
 
-### 4. predicting_loan_default
+### 4. skilled_coin_flipper
+
+Simulated betting games
+
+### 5. predicting_loan_default
 
 Very naive hyperparameter selection with LendingClub data
 
