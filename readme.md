@@ -1,5 +1,7 @@
 # notebooks
 
+![tests](https://github.com/dmjz/notebooks/workflows/tests/badge.svg)
+
 A sample of mathematical topics explored in Jupyter notebooks
 
 ![cayley_graph](docs/cayley_graph_2.PNG)
